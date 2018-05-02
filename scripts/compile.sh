@@ -1,0 +1,1 @@
+g++ ../src/main.cpp ../src/iterated.cpp -I../headers -g -o ../execs/a.out -std=c++11
