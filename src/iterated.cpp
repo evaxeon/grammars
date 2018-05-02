@@ -9,7 +9,7 @@
 #include "header.hpp"
 
 
-
+//LCOV_EXCL_START
 std::ostream& operator<<(std::ostream &s, const state &type) {
     std::string typestring;
     switch(type) {
@@ -94,18 +94,38 @@ std::ostream& operator<<(std::ostream& os, const std::vector<int>& from) {
     return os;
 }
 
-std::ostream& operator<<(std::ostream& os, std::pair<std::string, std::vector<int> > & t) {
-    std::cout << t.first << std::endl;
-    for (std::vector<int>::const_iterator i = t.second.begin(); i != t.second.end(); ++i)
-    os << (char) *i << ' ';
-    std::cout << std::endl;
-    return os;
-}
 
 std::ostream& operator<<(std::ostream& os, std::deque<std::string> & t) {
     for (auto k: t) {
         os << k << " ";
     }
+    return os;
+}
+
+
+
+
+std::string vecToString(std::vector<int> vec) {
+    std::string res;
+    for (std::vector<int>::const_iterator i = vec.begin(); i != vec.end(); ++i)
+    res += *i;
+    return res;
+}
+
+
+
+void addToPair(std::pair<std::string, std::vector<int> > from, std::pair<std::string, std::vector<int> >& to) {
+    to.first += from.first;
+    addToVector(to.second, from.second);
+}
+
+//LCOV_EXCL_STOP
+
+std::ostream& operator<<(std::ostream& os, std::pair<std::string, std::vector<int> > & t) {
+    std::cout << t.first << std::endl;
+    for (std::vector<int>::const_iterator i = t.second.begin(); i != t.second.end(); ++i)
+    os << (char) *i << ' ';
+    std::cout << std::endl;
     return os;
 }
 
@@ -116,23 +136,8 @@ void addToVector(std::vector<int>& dest, std::vector<int> from) {
     }
 }
 
-std::string vecToString(std::vector<int> vec) {
-    std::string res;
-    for (std::vector<int>::const_iterator i = vec.begin(); i != vec.end(); ++i)
-    res += *i;
-    return res;
-}
-
 void dequeToString (std::deque<std::string> from, std::string& to) {
     for (auto k: from) {
         to += k;
     }
 }
-
-void addToPair(std::pair<std::string, std::vector<int> > from, std::pair<std::string, std::vector<int> >& to) {
-    to.first += from.first;
-    addToVector(to.second, from.second);
-}
-
-
-
