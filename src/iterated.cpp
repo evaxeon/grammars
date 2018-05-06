@@ -10,7 +10,7 @@
 
 
 //LCOV_EXCL_START
-std::ostream& operator<<(std::ostream &s, const state &type) {
+std::ostream& operator<<(std::ostream &s, const State &type) {
     std::string typestring;
     switch(type) {
     case 0:
@@ -48,7 +48,7 @@ std::ostream& operator<<(std::ostream &s, const state &type) {
     return s;
 }
 
-std::ostream& operator<<(std::ostream &s, const finalState &type) {
+std::ostream& operator<<(std::ostream &s, const FinalState &type) {
     std::string typestring;
     switch(type) {
     case 0:
@@ -90,7 +90,7 @@ std::ostream& operator<<(std::ostream& os, const Token& t) {
 
 std::ostream& operator<<(std::ostream& os, const std::vector<int>& from) {
     for (std::vector<int>::const_iterator i = from.begin(); i != from.end(); ++i)
-    os << (char) *i << ' ';
+    os << (char) *i;
     return os;
 }
 
@@ -124,7 +124,7 @@ void addToPair(std::pair<std::string, std::vector<int> > from, std::pair<std::st
 std::ostream& operator<<(std::ostream& os, std::pair<std::string, std::vector<int> > & t) {
     std::cout << t.first << std::endl;
     for (std::vector<int>::const_iterator i = t.second.begin(); i != t.second.end(); ++i)
-    os << (char) *i << ' ';
+    os << (char) *i/* << ' '*/;
     std::cout << std::endl;
     return os;
 }
