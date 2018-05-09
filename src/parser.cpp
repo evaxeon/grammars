@@ -45,7 +45,7 @@ void TokenSyntax::checkBinaryOp() {
         stateStack.push(res);
         result.push_back(res);
     } else {
-        throw TokenException("Wrong type for binary operation!", opPos, opLine);
+        throw TokenException("Syntax error: Wrong type for binary operation!", opPos, opLine);
     }
 
 }
@@ -85,9 +85,9 @@ void TokenSyntax::funcProcess(std::string& arrString, std::vector<int>::iterator
             ret = false;
         }
     }
-    if (isdigit(*it)) throw TokenException("Numberconst found in function! ", curTok.position, curTok.line);
-    if (*it == 'f') throw TokenException("Second f found in function! ", curTok.position, curTok.line);
-    if (empty) throw TokenException("Function must have at least return value type. ", curTok.position, curTok.line);
+    if (isdigit(*it)) throw TokenException("Syntax error: Numberconst found in function! ", curTok.position, curTok.line);
+    if (*it == 'f') throw TokenException("Syntax error: Second f found in function! ", curTok.position, curTok.line);
+    if (empty) throw TokenException("Syntax error: Function must have at least return value type. ", curTok.position, curTok.line);
 }
 
 FinalState TokenSyntax::checkOp(Token tok, std::string& arrString) {
@@ -114,14 +114,14 @@ FinalState TokenSyntax::checkOp(Token tok, std::string& arrString) {
                 arrDeque.push_back(funcInArr);
                 return ARRAYTYPE;
             }
-            throw TokenException("Unknown array type without any element type. ", curTok.position, curTok.line);
+            throw TokenException("Syntax error: Unknown array type without any element type. ", curTok.position, curTok.line);
 
         } else if (*it == 'f') {
             funcProcess(arrString, it);
             return FUNCTYPE;
         } else if ((*it == 's' || *it == 't') && (tok.contents.size() <= 2)) {
             return STRINGTYPE;
-        } else throw TokenException("Unknown IDENT literal. ", curTok.position, curTok.line);
+        } else throw TokenException("Syntax error: Unknown IDENT literal. ", curTok.position, curTok.line);
         break;
     case NUMBERCONST:
         return INTTYPE;
@@ -134,7 +134,7 @@ FinalState TokenSyntax::checkOp(Token tok, std::string& arrString) {
 void TokenSyntax::S() {
     FinalState curState;
     curState = E();
-    if (curTok.tokenType != ENDOFFILE) throw TokenException("Error found in your expression. ", curTok.position, curTok.line);
+    if (curTok.tokenType != ENDOFFILE) throw TokenException("Syntax critical flaw: Error found in your expression. ", curTok.position, curTok.line);
     std::cout << "This expression is correct!\n";
     
     std::cout << "Result: \n";
@@ -158,7 +158,7 @@ FinalState TokenSyntax::E() {
             nextToken();
             curState = F();
             checkBinaryOp();
-            if (curState != INTTYPE) throw TokenException("Arithmetical operation supports INTTYPES only! ", curTok.position, curTok.line); 
+            if (curState != INTTYPE) throw TokenException("Syntax error: Arithmetical operation supports INTTYPES only! ", curTok.position, curTok.line); 
         }
         return curState;
     } return EMPTYTYPE;
@@ -177,11 +177,11 @@ FinalState TokenSyntax::F() {
             nextToken();
             curState = T();
             checkBinaryOp();
-            if (curState != INTTYPE) throw TokenException("Arithmetical operation supports INTTYPES only!", curTok.position, curTok.line); 
+            if (curState != INTTYPE) throw TokenException("Syntax error: Arithmetical operation supports INTTYPES only!", curTok.position, curTok.line); 
             
         }
         return curState;
-    } else throw TokenException("Didn't find the expected literal in F"); 
+    } else throw TokenException("Syntax error: Didn't find the expected literal in F"); 
 }
 
 FinalState TokenSyntax::T() {
@@ -230,9 +230,9 @@ FinalState TokenSyntax::T() {
                 else throw TokenException("Wrong array lexem", curTok.position, curTok.line); 
                 dequeToString(arrDeque, arrString); 
                 nextToken();
-                if (E() != INTTYPE) throw TokenException("Indexing allowed only with INTTYPES! ", curTok.position, curTok.line);
+                if (E() != INTTYPE) throw TokenException("Syntax error: Indexing allowed only with INTTYPES! ", curTok.position, curTok.line);
 
-                if (curTok.tokenType != RIGHTSQUARE) throw TokenException("Didn't find the RIGHTSQUARE literal ", curTok.position, curTok.line);
+                if (curTok.tokenType != RIGHTSQUARE) throw TokenException("Syntax error: Didn't find the RIGHTSQUARE literal ", curTok.position, curTok.line);
                 stateStack.pop();
                 arrVector.push_back(']');
                 if (arrDeque.size() == 1) {
@@ -264,7 +264,7 @@ FinalState TokenSyntax::T() {
         nextToken();
         arrDeque.clear();
         curState = E();
-        if (curTok.tokenType != RIGHTBR) throw TokenException("Didn't find rightbr literal. ", curTok.position, curTok.line);
+        if (curTok.tokenType != RIGHTBR) throw TokenException("Syntax error: Didn't find rightbr literal. ", curTok.position, curTok.line);
 
         tempPair = stateStack.top();
         stateStack.pop();
@@ -273,6 +273,6 @@ FinalState TokenSyntax::T() {
         stateStack.push(tempPair);
 
         nextToken();
-    } else throw TokenException("Didn't find the expected literal in T. ", curTok.position, curTok.line); 
+    } else throw TokenException("Syntax error: Didn't find the expected literal in T. ", curTok.position, curTok.line); 
     return curState;
 }

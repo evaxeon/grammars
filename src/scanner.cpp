@@ -122,7 +122,7 @@ void TokenIterator::getToken() {
             } else if (c == EOF) {
                 CS = ENDOFFILE;
                 break;
-            } else throw TokenException("Not expected symbol. ", curPos, curLine);
+            } else throw TokenException("Scanner error: Not expected symbol. ", curPos, curLine);
             break;
         case IDENT: 
             if (isalpha(c) || isdigit(c)) {
@@ -137,7 +137,7 @@ void TokenIterator::getToken() {
             } else if (c == ' ' || c == '\n' || c == '\t' || c == '+' || c == '*' || c == ')' || c == '(' || c == '[' || c == ']') {
                 lastTokenAssign(curVector, CS, tokenPos, tokenLine);
                 return;
-            } else throw TokenException("Character expected in IDENT. ", curPos, curLine);
+            } else throw TokenException("Scanner error: Character expected in IDENT. ", curPos, curLine);
             break;
         case NUMBERCONST:
             if (isdigit(c)) {
@@ -146,13 +146,13 @@ void TokenIterator::getToken() {
             } else if (c == ' ' || c == '\n' || c == '\t' || c == '(' || c == ')' || c == '[' || c == ']' || isalpha(c) || c == '+' || c == '*') {
                 lastTokenAssign(curVector, CS, tokenPos, tokenLine);
                 return;
-            } else throw TokenException("Digit or divider expected in NUMBERCONST. ", curPos, curLine);
+            } else throw TokenException("Scanner error: Digit or divider expected in NUMBERCONST. ", curPos, curLine);
             break;
         case LEFTBR:case RIGHTBR:case LEFTSQUARE:case RIGHTSQUARE:case PLUS:case MULTIPLY:
             if (isalpha(c) || isdigit(c) || c == '+' || c == '*' || c == '(' || c == ')' || c == '[' || c == ']' || c == ' ' || c == '\n' || c == '\t') {
                 lastTokenAssign(curVector, CS, tokenPos, tokenLine);
                 return;
-            } else throw TokenException("Not expected in SIGNS. ", curPos, curLine);
+            } else throw TokenException("Scanner error: Not expected in SIGNS. ", curPos, curLine);
             break;
         case DIVIDER:
             if (c == ' ' || c == '\n' || c == '\t') {
